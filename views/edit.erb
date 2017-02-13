@@ -1,6 +1,7 @@
-<h2>New user</h2>
+<h2>Edit user</h2>
 
-<form action="new" method="post" enctype="multipart/form-data" onsubmit="return validateFile();">
+<form action="<%= params[:id] %>" method="post" enctype="multipart/form-data" onsubmit="return validateFile(this);">
+	<input type="hidden" name="_method" value="put">
 	<h3>Name</h3>
 	<input type="text" name="user[name]">
 	<h3>Email</h3>
