@@ -3,15 +3,15 @@
 <form action="<%= params[:id] %>" method="post" enctype="multipart/form-data" onsubmit="return validateFile(this);">
 	<input type="hidden" name="_method" value="put">
 	<h3>Name</h3>
-	<input type="text" name="user[name]">
+	<input type="text" name="user[name]" value="<%= @user.name %>">
 	<h3>Email</h3>
-	<input type="text" name="user[email]">
+	<input type="text" name="user[email]" value="<%= @user.email %>">
 	<h3>Password</h3>
-	<input type="password" name="user[password]">
+	<input type="password" name="user[password]" value="<%= @user.password %>">
 	<h3>Avatar</h3>
 	<input id="imageUpload" type="file" name="file">
 	<h3>About me</h3>
-	<textarea name="user[about]" rows="10" cols="50"></textarea>
+	<textarea name="user[about]" rows="10" cols="50"><%= @user.about %></textarea>
 	<br>
 	<input type="submit" name="submit">
 </form>

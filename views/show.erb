@@ -1,5 +1,11 @@
 <h2>All users</h2>
 <a href="new">New user</a>
+<p>Search</p>
+<form action="search" method="post">
+	<input type="text" name="search" style="width: 50%; margin-bottom: 30px">
+	<input type="submit" value="Search">
+</form>
+
 <table style="width: 90%">
 	<tr>
 		<th>Avatar</th>
@@ -9,8 +15,8 @@
 	</tr>
 	<% if @users != nil %>
 		<% @users.each do |u| %>
-			<tr>
-				<th><a href="images/<%= u.id %>"><img src="./images/<%= u.id %>"></a></th>
+			<tr id="item<%= u.id %>">
+				<th><a href="images/<%= u.avatar %>"><img src="./images/<%= u.avatar %>"></a></th>
 				<th><%= u.name %></th>
 				<th><%= u.email %></th>
 				<th><%= u.about %></th>
@@ -19,10 +25,11 @@
 						<input type="submit" value="Update">
 					</form>
 				<th>
-					<form action="<%= u.id %>" method="post">
+					<!-- <form id="deleteForm" action="<%= u.id %>" method="post">
 						<input type="hidden" name="_method" value="delete">
 						<input type="submit" value="Delete">
-					</form>
+					</form> -->
+					<button class="deleteButton" value="<%= u.id %>">Delete</button>
 				</th>
 			</tr>
 		<% end %>
