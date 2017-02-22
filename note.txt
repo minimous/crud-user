@@ -1,0 +1,25 @@
+users:
+id
+name
+password
+email
+avatar
+about
+
+ALTER TABLE books (
+	book_id SERIAL PRIMARY KEY,
+	user_id SERIAL references users(id),
+	title varchar(50),
+	publisher varchar(50),
+	year int2
+);
+
+CREATE TABLE book_reviews (
+	review_id SERIAL PRIMARY KEY,
+	user_id SERIAL references users(id),
+	book_id SERIAL references books(book_id),
+	star int2,
+	subject varchar(100),
+	content varchar(255)
+);
+

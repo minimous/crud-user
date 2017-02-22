@@ -1,0 +1,43 @@
+<h2>Book information</h2>
+
+<h3>Title:</h3>
+<p><%= @book.title %></p>
+<h3>Author:</h3>
+<p><%= @book.author %></p>
+<h3>Publisher:</h3>
+<p><%= @book.publisher %></p>
+<h3>Year:</h3>
+<p><%= @book.year %></p>
+<% if session[:user][:id] == @book.user_id %>
+	<a href="editbook/<%= @book.book_id %>">Edit this book</a>
+<% end %>
+<h3>Your Review:</h3>
+<form action="/review" method="post">
+	<div class="stars">
+    <input class="star star-5" id="star-5" type="radio" name="star[5]"/>
+    <label class="star star-5" for="star-5"></label>
+    <input class="star star-4" id="star-4" type="radio" name="star[4]"/>
+    <label class="star star-4" for="star-4"></label>
+    <input class="star star-3" id="star-3" type="radio" name="star[3]"/>
+    <label class="star star-3" for="star-3"></label>
+    <input class="star star-2" id="star-2" type="radio" name="star[2]"/>
+    <label class="star star-2" for="star-2"></label>
+    <input class="star star-1" id="star-1" type="radio" name="star[1]"/>
+    <label class="star star-1" for="star-1"></label>
+	</div>
+	<h5>Subject</h5>
+	<input type="text" name="subject">
+	<h5>Content</h5>
+	<textarea name="content" rows="10" cols="50"></textarea>
+	<br>
+	<input type="submit" name="Submit">
+</form>
+<br>
+<h3>Other reviews:</h3>
+<br>
+<% @reviews.each do |r| %>
+	<h4>Score : <%= r.star %>/5</h4>
+	<h4><%= r.subject %></h4>
+	<p><%= r.content %></p>
+	<br>
+<% end %>

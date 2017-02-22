@@ -1,0 +1,44 @@
+<h2>User Information</h2>
+
+<img src="./images/<%= @user.avatar %>">
+<h3>User name</h3>
+<p><%=  @user.email %></p>
+<h3>Email</h3>
+<p><%= @user.email %></p>
+<h3>About me</h3>
+<p><%= @user.about %></p>
+<form action="edit/<%= @user.id %>" method="get">
+	<input type="submit" value="Update Information">
+</form>
+<br>
+<a href="/newbook">Add a book</a>
+<% if @books.first != nil %>
+<h2>My Books</h2>
+<table style="width: 90%; margin-bottom: 20px;">
+	<tr>
+		<th>Title</th>
+		<th>Publisher</th>
+		<th>Year</th>
+	</tr>
+	<tr>
+		<% @books.each do |b| %>
+			<th><%= b.title %></th>
+			<th><%= b.publisher %></th>
+			<th><%= b.year %></th>
+			<th>
+				<form action="editbook/<%= b.id %>" method="get">
+					<input type="submit" name="Edit" value="Edit">
+				</form>
+			</th>
+			<th>
+				<form action="deletebook/<%= b.id%>" method="post">
+					<input type="hidden" name="_method" value="delete">
+					<input type="submit" name="Delete" value="Delete">
+				</form>
+			</th>
+		<% end %>
+	</tr>
+</table>
+<% end %>
+
+

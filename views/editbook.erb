@@ -1,0 +1,14 @@
+<h2>Edit book</h2>
+
+<form action="<%= params[:id] %>" method="post">
+	<input type="hidden" name="_method" value="put">
+	<h3>Title</h3>
+	<input type="text" name="book[title]" value="<%= @book.title %>">
+	<h3>Publisher</h3>
+	<input type="text" name="book[publisher]" value="<%= @book.publisher %>">
+	<h3>Year</h3>
+	<input type="text" name="book[year]" value="<%= @book.year %>">
+	<br>
+	<br>
+	<input type="submit" name="submit">
+</form>
