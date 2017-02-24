@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'pry'
 require 'bundler'
+require 'pony'
 Bundler.require()
 require './models/user'
 require './models/book'
@@ -22,7 +23,7 @@ set :session_secret, "secret"
 get '/' do
 	@title = "Show all users"
 	@users = User.all.order(:id)
-	# binding.pry
+	binding.pry
 	erb :index
 end
 
@@ -32,24 +33,52 @@ get '/new' do
 end
 
 post '/new' do
-	file = params[:file][:tempfile] if params[:file][:tempfile] != nil
-	File.open("./public/images/#{ params[:user][:email] }", 'wb') do |f|
-		f.write(file.read)
+	user = User.where("email = ?", params[:user][:email])
+	if user
+		session[:error] = "The email has existed."
+		erb :new
+	else
+		file = params[:file][:tempfile] if params[:file][:tempfile] != nil
+		File.open("./public/images/#{ params[:user][:email] }", 'wb') do |f|
+			f.write(file.read)
+		end
+		activation_token = User.new_token
+		@user = User.create(
+			name: params[:user][:name],
+			email: params[:user][:email],
+			password: params[:user][:password],
+			avatar: params[:user][:email],
+			about: params[:user][:about],
+			activated: false,
+			activation_token: activation_token
+		)
+		User.send_activation_mail(params[:user][:email], activation_token)
+		session[:info] = "Email sent. Please check your email for account activation."
+		redirect '/'
 	end
-	@user = User.create(
-		name: params[:user][:name],
-		email: params[:user][:email],
-		password: params[:user][:password],
-		avatar: params[:user][:email],
-		about: params[:user][:about]
-	)
-	redirect '/'
+end
+
+get '/activate' do
+	user = User.where("activation_token = ?", params[:token])
+	if user
+		user.update(activated: true)
+		session[:user] = user
+		session[:success] = "Account Activation success !"
+		erb :info
+	else
+		"The link is not invalid."
+	end
 end
 
 get '/edit/:id' do
 	@title = "Edit user"
 	@user = User.find_by id: params[:id]
-	erb :edit
+	if @user.activated
+		erb :edit
+	else
+		session[:error] = "Users with unactivated account cannot edit information."
+		redirect '/'
+	end	
 end
 
 put '/edit/:id' do
@@ -80,6 +109,12 @@ end
 delete '/:id' do
 	user = User.find_by id: params[:id]
 	File.delete("./public/images/#{user.avatar}") if File.exist?("./public/images/#{user.avatar}")
+	@books = Book.book_from_user params[:id]
+	@books.each do |i|
+		reviews = BookReview.find_all_reviews i.book_id
+		reviews.each { |j| BookReview.delete(j.review_id) }
+		Book.delete(i.book_id)
+	end
 	User.delete(params[:id])
 	redirect '/'
 end
@@ -102,7 +137,7 @@ end
 post '/login' do
 	user = User.find_by email: params[:email]
 	if user.nil? ||  user.password != params[:password]
-		@alert = "Invalid email or password."
+		session[:error] = "Invalid email or password."
 		erb :login
 	else 
 		session[:user] = user
@@ -159,6 +194,8 @@ put '/editbook/:id' do
 end
 
 delete '/deletebook/:id' do
+	@reviews = BookReview.find_all_reviews params[:id]
+	@reviews.each { |i| BookReview.delete(i.review_id) }
 	Book.delete(params[:id])
 end
 
@@ -180,3 +217,4 @@ post '/review' do
 	)
 	redirect '/book/'+session[:book][:book_id].to_s
 end
+

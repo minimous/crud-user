@@ -17,9 +17,16 @@ GEM
     coderay (1.1.1)
     concurrent-ruby (1.0.4)
     i18n (0.8.0)
+    mail (2.6.4)
+      mime-types (>= 1.16, < 4)
     method_source (0.8.2)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     minitest (5.10.1)
     pg (0.19.0)
+    pony (1.11)
+      mail (>= 2.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -48,6 +55,7 @@ PLATFORMS
 
 DEPENDENCIES
   pg
+  pony
   pry
   pry-byebug
   sinatra

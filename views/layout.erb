@@ -25,12 +25,24 @@
 			</ul>
 		</div>
 	</nav>
-	<% if !@alert.nil? %>
+	<% if !session[:error].nil? %>
 	<div class="alert alert-danger">
-		<strong>Failed !</strong> <%= @alert %>
-		<% @alert = nil %>
+		<strong>Failed !</strong> <%= session[:error] %>
+		<% session[:error] = nil %>
 	</div>
-<% end %>
+	<% end %>
+	<% if !session[:info].nil? %>
+	<div class="alert alert-info">
+		<strong>Done !</strong> <%= session[:info] %>
+		<% session[:info] = nil %>
+	</div>
+	<% end %>
+	<% if !session[:success].nil? %>
+	<div class="alert alert-success">
+		<strong>Done !</strong> <%= session[:success] %>
+		<% session[:success] = nil %>
+	</div>
+	<% end %>
 	<div class="col-lg-10 col-lg-offset-2">
 		<%= yield %>
 	</div>
