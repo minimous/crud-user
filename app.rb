@@ -28,14 +28,14 @@ end
 
 get '/new' do
 	@title = "Create new user"
-	erb :new
+	erb :'user/new'
 end
 
 post '/new' do
 	user = User.where("email = ?", params[:user][:email])
 	if user.first
 		session[:error] = "The email has existed."
-		erb :new
+		erb :'user/new'
 	else
 		file = params[:file][:tempfile] if params[:file][:tempfile] != nil
 		File.open("./public/images/#{ params[:user][:email] }", 'wb') do |f|
@@ -59,7 +59,7 @@ end
 
 get '/activate' do
 	user = User.where("activation_token = ?", params[:token])
-	if user
+	if user.first
 		user.update(activated: true)
 		session[:user] = user
 		session[:success] = "Account Activation success !"
@@ -73,7 +73,7 @@ get '/edit/:id' do
 	@title = "Edit user"
 	@user = User.find_by id: params[:id]
 	if @user.activated
-		erb :edit
+		erb :'user/edit'
 	else
 		session[:error] = "Users with unactivated account cannot edit information."
 		redirect '/'
@@ -151,7 +151,7 @@ get '/info' do
 		@title = "Personal Information"
 		@user = session[:user]
 		@books = Book.book_from_user(@user.id).all
-		erb :info
+		erb :'user/info'
 	end
 end
 
@@ -166,7 +166,7 @@ get '/newbook' do
 	else
 		@title = "Add new book"
 		@user = session[:user]
-		erb :newbook
+		erb :'book/new'
 	end
 end
 
@@ -183,7 +183,7 @@ end
 get '/editbook/:id' do
 	@title = "Edit Book"
 	@book = Book.find_by book_id: params[:id]
-	erb :editbook
+	erb :'book/edit'
 end
 
 put '/editbook/:id' do
@@ -203,7 +203,7 @@ get '/book/:id' do
 	@title = "Book Detail"
 	@reviews = BookReview.find_all_reviews @book.book_id
 	session[:book] = @book
-	erb :book
+	erb :'book/info'
 end
 
 post '/review' do
