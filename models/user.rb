@@ -17,7 +17,6 @@ class User < ActiveRecord::Base
 	def self.send_activation_mail(email, token)
 		@user = User.find_by email: email
 		Pony.mail({
-			from: "example@noreply.com",
 			to: email,
 			via: 'smtp',
 			subject: 'Account Activation',

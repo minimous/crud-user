@@ -23,7 +23,6 @@ set :session_secret, "secret"
 get '/' do
 	@title = "Show all users"
 	@users = User.all.order(:id)
-	binding.pry
 	erb :index
 end
 
@@ -34,7 +33,7 @@ end
 
 post '/new' do
 	user = User.where("email = ?", params[:user][:email])
-	if user
+	if user.first
 		session[:error] = "The email has existed."
 		erb :new
 	else
@@ -64,7 +63,7 @@ get '/activate' do
 		user.update(activated: true)
 		session[:user] = user
 		session[:success] = "Account Activation success !"
-		erb :info
+		redirect '/info'
 	else
 		"The link is not invalid."
 	end
@@ -125,7 +124,7 @@ post '/search' do
 	if @users.nil?
 		"No user found !"
 	else
-		erb :show
+		erb :index
 	end
 end
 
