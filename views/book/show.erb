@@ -1,0 +1,30 @@
+<h2>All books</h2>
+<table style="width: 90%">
+	<tr>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Publisher</th>
+		<th>Year</th>
+	</tr>
+	<% if @books != nil %>
+		<% @books.each do |u| %>
+			<tr id="item<%= u.id %>">
+				<th><a href="book/<%= u.book_id %>"><%= u.title %></a></th>
+				<th><%= u.author %></th>
+				<th><%= u.publisher %></th>
+				<th><%= u.year %></th>
+				<th>
+					<form action="editbook/<%= u.id %>" method="get">
+						<input type="submit" value="Update">
+					</form>
+				<th>
+					<!-- <form id="deleteForm" action="<%= u.id %>" method="post">
+						<input type="hidden" name="_method" value="delete">
+						<input type="submit" value="Delete">
+					</form> -->
+					<button class="deleteButton" value="deletebook/<%= u.id %>">Delete</button>
+				</th>
+			</tr>
+		<% end %>
+	<% end %>
+</table>

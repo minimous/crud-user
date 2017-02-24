@@ -160,6 +160,12 @@ get '/logout' do
 	redirect '/'
 end
 
+get '/books' do
+	@title = "Show all books"
+	@books = Book.all.order(:title)
+	erb :'book/show'
+end
+
 get '/newbook' do
 	if session[:user].nil?
 		redirect '/login'
